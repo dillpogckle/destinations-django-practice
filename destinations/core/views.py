@@ -32,7 +32,9 @@ def create_user(request :HttpRequest):
     user.save()
     session = Session(user=user, token=make_password(email))
     session.save()
-    return HttpResponseRedirect("/").set_cookie("session_token", session.token)
+    res = HttpResponseRedirect("/")
+    res.set_cookie("session_token", session.token)
+    return res
 
 
 def login(request: HttpRequest):
@@ -49,10 +51,15 @@ def authenticate(request: HttpRequest):
         return HttpResponseBadRequest("Incorrect password <br> <a href='/login/'>Go back</a>")
     session = Session(user=user, token=make_password(email))
     session.save()
-    return HttpResponseRedirect("/").set_cookie("session_token", session.token)
+    res = HttpResponseRedirect("/")
+    res.set_cookie("session_token", session.token)
+    return res
 
 
 def logout(request: HttpRequest):
     session = Session.objects.get(token=request.COOKIES["session_token"])
     session.delete()
-    return HttpResponseRedirect("/").delete_cookie("session_token")
+    res = HttpResponseRedirect("/")
+    res.delete_cookie("session_token")
+    return res
+

@@ -6,5 +6,22 @@
 </head>
 <body>
 
+<h1>Destination</h1>
+<form action="/destinations/{{ destination.id }}/" method="post">
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ destination.name }}">
+
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" name="rating" value="{{ destination.rating }}">
+
+    <label for="review">Review:</label>
+    <input type="text" id="review" name="review" value="{{ destination.review }}">
+
+    <label for="public">Public:</label>
+    <input type="checkbox" id="public" name="share_publicly" {% if destination.share_publicly %}checked{% endif %}>
+
+    <input type="submit" value="Submit">
+</form>
 </body>
 </html>

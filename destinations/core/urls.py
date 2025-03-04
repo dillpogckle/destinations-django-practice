@@ -8,4 +8,8 @@ urlpatterns = [
     path("sessions/new/", views.login, name="login"),
     path("sessions/", views.authenticate, name="authenticate"),
     path("sessions/destroy/", views.logout, name="logout"),
+    path("destinations/", views.destinations, name="destinations"),
+    path("destinations/new/", views.new_destination, name="new_destination"),
+    path("destinations/<int:id>/", views.destination, name="destination"),
+    path("destinations/<int:id>/destroy/", views.delete_destination, name="delete_destination"),
 ]

@@ -63,3 +63,42 @@ def logout(request: HttpRequest):
     res.delete_cookie("session_token")
     return res
 
+
+def destinations(request: HttpRequest):
+    if request.method == "POST":
+        user = request.user
+        name = request.POST["name"]
+        review = request.POST["review"]
+        rating = request.POST["rating"]
+        share_publicly = request.POST.get("share_publicly", False)
+        destination = Destination(name=name, review=review, rating=rating, user=user, share_publicly=share_publicly)
+        destination.save()
+        return HttpResponseRedirect("/destinations/")
+
+    user = request.user
+    destinations = Destination.objects.filter(user=user)
+    return render(request, "core/destinations.html", {"destinations": destinations})
+
+
+def new_destination(request: HttpRequest):
+    return render(request, "core/new_destination.html")
+
+
+def destination(request: HttpRequest, id: int):
+    if request.method == "POST":
+        destination = Destination.objects.get(id=id)
+        destination.name = request.POST["name"]
+        destination.review = request.POST["review"]
+        destination.rating = request.POST["rating"]
+        destination.share_publicly = request.POST.get("share_publicly", False)
+        destination.save()
+        return HttpResponseRedirect("/destinations/")
+
+    destination = Destination.objects.get(id=id)
+    return render(request, "core/destination.html", {"destination": destination})
+
+
+def delete_destination(request: HttpRequest, id: int):
+    Destination.objects.get(id=id).delete()
+    return HttpResponseRedirect("/destinations/")
+

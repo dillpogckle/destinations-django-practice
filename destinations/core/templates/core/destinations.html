@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Destinations</title>
+</head>
+<body>
+{% for destination in destinations %}
+    <div class="dest-card">
+        <h1>{{ destination.name }}</h1>
+        <h2>{{ destination.rating }}</h2>
+        <p>{{ destination.review }}</p>
+    </div>
+{% endfor %}
+
+</body>
+</html>

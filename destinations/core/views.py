@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Destination, User
+from .models import Destination, User, Session
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.hashers import make_password, check_password
 
@@ -19,11 +19,40 @@ def create_user(request :HttpRequest):
     email = request.POST["email"]
     password = request.POST["password"]
     if name == "" or email == "" or password == "":
-        return HttpResponseBadRequest("All fields must be filled <br> <a href='/new_user/'>Go back</a>")
+        return HttpResponseBadRequest("All fields must be filled <br> <a href='/users/new/'>Go back</a>")
     if User.objects.filter(email=email).exists():
-        return HttpResponseBadRequest("Email already exists <br> <a href='/new_user/'>Go back</a>")
+        return HttpResponseBadRequest("Email already exists <br> <a href='/users/new/'>Go back</a>")
+    if email.count("@") != 1 or email.count(".") == 0:
+        return HttpResponseBadRequest("Invalid email <br> <a href='/users/new/'>Go back</a>")
+    if len(password) < 8:
+        return HttpResponseBadRequest("Password must be at least 8 characters <br> <a href='/users/new/'>Go back</a>")
 
     # Create user
     user = User(name=name, email=email, password_hash=make_password(password))
     user.save()
-    return HttpResponseRedirect("/")
+    session = Session(user=user, token=make_password(email))
+    session.save()
+    return HttpResponseRedirect("/").set_cookie("session_token", session.token)
+
+
+def login(request: HttpRequest):
+    return render(request, "core/login.html")
+
+
+def authenticate(request: HttpRequest):
+    email = request.POST["email"]
+    password = request.POST["password"]
+    if not User.objects.filter(email=email).exists():
+        return HttpResponseBadRequest("Email does not exist <br> <a href='/login/'>Go back</a>")
+    user = User.objects.get(email=email)
+    if not check_password(password, user.password_hash):
+        return HttpResponseBadRequest("Incorrect password <br> <a href='/login/'>Go back</a>")
+    session = Session(user=user, token=make_password(email))
+    session.save()
+    return HttpResponseRedirect("/").set_cookie("session_token", session.token)
+
+
+def logout(request: HttpRequest):
+    session = Session.objects.get(token=request.COOKIES["session_token"])
+    session.delete()
+    return HttpResponseRedirect("/").delete_cookie("session_token")

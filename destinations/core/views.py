@@ -5,8 +5,9 @@ from django.contrib.auth.hashers import make_password, check_password
 
 
 def index(request: HttpRequest):
+    is_logged_in = "session_token" in request.COOKIES and Session.objects.filter(token=request.COOKIES["session_token"]).exists()
     destinations = Destination.objects.filter(share_publicly=True).order_by('-id')[:5]
-    return render(request, "core/index.html", {"destinations": destinations})
+    return render(request, "core/index.html", {"destinations": destinations, "is_logged_in": is_logged_in})
 
 
 def new_user(request: HttpRequest):

@@ -7,6 +7,16 @@
     <title>Home Page</title>
 </head>
 <body>
+<nav>
+    {% if is_logged_in %}
+        <a href="/sessions/">Login</a>
+        <a href="/sessions/new/">Create User</a>
+    {% else %}
+        <a href="/destinations/">Destinations</a>
+        <a href="/sessions/destroy/">Logout</a>
+    {% endif %}
+</nav>
+
     {% for destination in destinations %}
         <div class="dest-card">
             <h1>{{ destination.name }}</h1>

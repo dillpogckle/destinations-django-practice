@@ -1,0 +1,164 @@
+/* General reset and box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+h1, h2 {
+    color: #2c3e50;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+}
+
+/* Navbar styles */
+nav {
+    background-color: #3498db;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #2980b9;
+}
+
+/* Form styling */
+form {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+form input[type="text"], form input[type="number"], form input[type="email"], form input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+form input[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+form input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+form input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Destination card styles */
+.dest-card {
+    background-color: white;
+    padding: 20px;
+    margin: 15px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.dest-card:hover {
+    transform: scale(1.03);
+}
+
+.dest-card h1 {
+    font-size: 1.8em;
+    margin-bottom: 0.5em;
+}
+
+.dest-card h2 {
+    color: #e67e22;
+    font-size: 1.4em;
+    margin-bottom: 1em;
+}
+
+.dest-card p {
+    color: #7f8c8d;
+    font-size: 1em;
+}
+
+/* Link styles inside destination cards */
+.dest-card a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.dest-card a:hover {
+    text-decoration: underline;
+}
+
+/* Styling for buttons and delete forms */
+input[type="submit"].delete {
+    background-color: #e74c3c;
+    border-radius: 5px;
+}
+
+input[type="submit"].delete:hover {
+    background-color: #c0392b;
+}
+
+/* Create Destination Page */
+form h1 {
+    margin-bottom: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    nav a {
+        padding: 8px 12px;
+        margin-right: 10px;
+    }
+
+    .dest-card {
+        padding: 15px;
+        margin: 10px 0;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    input[type="submit"] {
+        font-size: 1em;
+    }
+}

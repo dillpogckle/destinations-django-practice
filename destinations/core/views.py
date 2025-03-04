@@ -58,7 +58,7 @@ def authenticate(request: HttpRequest):
 
 
 def logout(request: HttpRequest):
-    session = Session.objects.get(token=request.COOKIES["session_token"])
+    session = Session.objects.get(token=request.COOKIES.get("session_token"))
     session.delete()
     res = HttpResponseRedirect("/")
     res.delete_cookie("session_token")
@@ -72,6 +72,10 @@ def destinations(request: HttpRequest):
         review = request.POST["review"]
         rating = request.POST["rating"]
         share_publicly = request.POST.get("share_publicly", False)
+        if share_publicly == "on":
+            share_publicly = True
+        else:
+            share_publicly = False
         destination = Destination(name=name, review=review, rating=rating, user=user, share_publicly=share_publicly)
         destination.save()
         return HttpResponseRedirect("/destinations/")
@@ -91,7 +95,12 @@ def destination(request: HttpRequest, id: int):
         destination.name = request.POST["name"]
         destination.review = request.POST["review"]
         destination.rating = request.POST["rating"]
-        destination.share_publicly = request.POST.get("share_publicly", False)
+        share_publicly = request.POST.get("share_publicly", False)
+        if share_publicly == "on":
+            share_publicly = True
+        else:
+            share_publicly = False
+        destination.share_publicly = share_publicly
         destination.save()
         return HttpResponseRedirect("/destinations/")
 

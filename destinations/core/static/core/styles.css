@@ -97,11 +97,6 @@ form input[type="checkbox"] {
     margin-bottom: 0.5em;
 }
 
-.dest-link:hover{
-    color: #3498db;
-
-}
-
 .dest-card h2 {
     color: #e67e22;
     font-size: 1.4em;
@@ -122,6 +117,11 @@ form input[type="checkbox"] {
 .dest-card a:hover {
     color: #3498db;
     text-decoration: underline;
+}
+
+.dest-link:hover{
+    color: #3498db;
+
 }
 
 /* Styling for buttons and delete forms */

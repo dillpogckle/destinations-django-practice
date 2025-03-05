@@ -6,12 +6,14 @@ import secrets
 
 
 def index(request: HttpRequest):
+    # Check if user is logged in and render home page
     is_logged_in = "session_token" in request.COOKIES and Session.objects.filter(token=request.COOKIES["session_token"]).exists()
     destinations = Destination.objects.filter(share_publicly=True).order_by('-id')[:5]
     return render(request, "core/index.html", {"destinations": destinations, "is_logged_in": is_logged_in})
 
 
 def new_user(request: HttpRequest):
+    # Render new user page
     return render(request, "core/new_user.html")
 
 
@@ -42,10 +44,12 @@ def create_user(request :HttpRequest):
 
 
 def login(request: HttpRequest):
+    # Render login page
     return render(request, "core/login.html")
 
 
 def authenticate(request: HttpRequest):
+    # Validation
     email = request.POST["email"]
     password = request.POST["password"]
     if not User.objects.filter(email=email).exists():
@@ -61,6 +65,7 @@ def authenticate(request: HttpRequest):
 
 
 def logout(request: HttpRequest):
+    # Delete session and redirect to home page
     session = Session.objects.get(token=request.COOKIES.get("session_token"))
     session.delete()
     res = HttpResponseRedirect("/")
@@ -69,6 +74,7 @@ def logout(request: HttpRequest):
 
 
 def destinations(request: HttpRequest):
+    # Create destination
     if request.method == "POST":
         user = request.user
         name = request.POST["name"]
@@ -83,16 +89,19 @@ def destinations(request: HttpRequest):
         destination.save()
         return HttpResponseRedirect("/destinations/")
 
+    # Render destinations page
     user = request.user
     destinations = Destination.objects.filter(user=user)
     return render(request, "core/destinations.html", {"destinations": destinations})
 
 
 def new_destination(request: HttpRequest):
+    # Render new destination page
     return render(request, "core/new_destination.html")
 
 
 def destination(request: HttpRequest, id: int):
+    # Update destination
     if request.method == "POST":
         destination = Destination.objects.get(id=id)
         destination.name = request.POST["name"]
@@ -107,14 +116,17 @@ def destination(request: HttpRequest, id: int):
         destination.save()
         return HttpResponseRedirect("/destinations/")
 
+    # Render destination page
     destination = Destination.objects.get(id=id)
     return render(request, "core/destination.html", {"destination": destination})
 
 
 def delete_destination(request: HttpRequest, id: int):
+    # Delete destination and redirect to destinations page
     Destination.objects.get(id=id).delete()
     return HttpResponseRedirect("/destinations/")
 
 
 def not_found(request: HttpRequest):
+    # 404 page
     return render(request, "core/404.html")

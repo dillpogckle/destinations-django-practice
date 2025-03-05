@@ -12,4 +12,5 @@ urlpatterns = [
     path("destinations/new/", views.new_destination, name="new_destination"),
     path("destinations/<int:id>/", views.destination, name="destination"),
     path("destinations/<int:id>/destroy/", views.delete_destination, name="delete_destination"),
+    path("404/", views.not_found, name="not_found"),
 ]

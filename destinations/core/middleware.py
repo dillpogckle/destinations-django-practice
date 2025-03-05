@@ -1,7 +1,6 @@
 from django.http import HttpRequest, HttpResponseRedirect
 from .models import Session
 
-
 def session_middleware(next):
     def middleware(request: HttpRequest):
 
@@ -14,5 +13,14 @@ def session_middleware(next):
         user = Session.objects.filter(token=token).first().user
         request.user = user
         res = next(request)
+        return res
+    return middleware
+
+
+def not_found_middleware(next):
+    def middleware(request: HttpRequest):
+        res = next(request)
+        if res.status_code == 404:
+            return HttpResponseRedirect("/404/")
         return res
     return middleware

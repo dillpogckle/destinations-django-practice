@@ -41,6 +41,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.session_middleware',
+    'core.middleware.not_found_middleware',
 ]
 
 ROOT_URLCONF = 'destinations.urls'

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import Destination, User, Session
 from django.http import HttpRequest, HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib.auth.hashers import make_password, check_password
+import secrets
 
 
 def index(request: HttpRequest):
@@ -27,11 +28,13 @@ def create_user(request :HttpRequest):
         return HttpResponseBadRequest("Invalid email <br> <a href='/users/new/'>Go back</a>")
     if len(password) < 8:
         return HttpResponseBadRequest("Password must be at least 8 characters <br> <a href='/users/new/'>Go back</a>")
+    if not any(char.isdigit() for char in password):
+        return HttpResponseBadRequest("Password must contain at least one number <br> <a href='/users/new/'>Go back</a>")
 
     # Create user
     user = User(name=name, email=email, password_hash=make_password(password))
     user.save()
-    session = Session(user=user, token=make_password(email))
+    session = Session(user=user, token=secrets.token_hex(32))
     session.save()
     res = HttpResponseRedirect("/")
     res.set_cookie("session_token", session.token)
@@ -46,11 +49,11 @@ def authenticate(request: HttpRequest):
     email = request.POST["email"]
     password = request.POST["password"]
     if not User.objects.filter(email=email).exists():
-        return HttpResponseBadRequest("Email does not exist <br> <a href='/login/'>Go back</a>")
+        return HttpResponseBadRequest("Email does not exist <br>  <a href='/users/new/'>Create an Account</a>")
     user = User.objects.get(email=email)
     if not check_password(password, user.password_hash):
-        return HttpResponseBadRequest("Incorrect password <br> <a href='/login/'>Go back</a>")
-    session = Session(user=user, token=make_password(email))
+        return HttpResponseBadRequest("Incorrect password <br> <a href='/sessions/new/'>Try Again</a>")
+    session = Session(user=user, token=secrets.token_hex(32))
     session.save()
     res = HttpResponseRedirect("/")
     res.set_cookie("session_token", session.token)
@@ -112,3 +115,6 @@ def delete_destination(request: HttpRequest, id: int):
     Destination.objects.get(id=id).delete()
     return HttpResponseRedirect("/destinations/")
 
+
+def not_found(request: HttpRequest):
+    return render(request, "core/404.html")

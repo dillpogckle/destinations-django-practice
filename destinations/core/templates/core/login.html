@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="{% static 'core/styles.css' %}">
 </head>
 <body>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/users/new/">Create User</a>
+    </nav>
+
     <h1>Login</h1>
     <form action="/sessions/" method="post">
         <label for="email">Email:</label>

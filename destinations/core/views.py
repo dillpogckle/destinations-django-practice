@@ -104,6 +104,8 @@ def destination(request: HttpRequest, id: int):
     # Update destination
     if request.method == "POST":
         destination = Destination.objects.get(id=id)
+        if destination.user != request.user:
+            return HttpResponseRedirect("/404/")
         destination.name = request.POST["name"]
         destination.review = request.POST["review"]
         destination.rating = request.POST["rating"]
